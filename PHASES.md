@@ -17,7 +17,7 @@ Push-Up Battle — phase tracker. This file is rechecked and updated after **eve
 | # | Phase | Status | Exit criteria |
 |---|-------|--------|---------------|
 | 0 | Bootstrap: toolchain + repo + docs | done | repo visible on GitHub |
-| 1 | Referee engine port to Dart + tests | pending | all engine tests green |
+| 1 | Referee engine port to Dart + tests | done | all engine tests green |
 | 2 | Camera + ML Kit pose + solo mode | pending | counts reps on a real phone |
 | 3 | LAN host + SQLite + QR join | pending | two phones in one room |
 | 4 | Race-to-N battle + Elo | pending | full 1v1 match, ratings persist |
@@ -33,12 +33,13 @@ Push-Up Battle — phase tracker. This file is rechecked and updated after **eve
 - [x] Push to https://github.com/EchoAnshu/PushIt
 
 ### Phase 1 - Referee engine (Dart port)
-- [ ] Port `calculate_angle`, `side_angle`, `combine_angles` -> `app/lib/engine/angles.dart`
-- [ ] Port `posture_valid` (wrist overhead, hand depth, torso verticality) -> `posture.dart`
-- [ ] Port `PushUpCounter` state machine -> `counter.dart`
-- [ ] Difficulty presets (lenient / standard / strict) + tempo gate
-- [ ] Unit tests incl. standing-curl rejection and plank acceptance
-- [ ] Update this file, commit, push
+- [x] Port `calculate_angle`, `side_angle`, `combine_angles` -> `app/lib/engine/angles.dart`
+- [x] Port `posture_valid` (wrist overhead, hand depth, torso verticality) -> `posture.dart`
+- [x] Port `PushUpCounter` state machine -> `counter.dart`
+- [x] Port `FormAnalyzer` -> `form_analyzer.dart`
+- [x] Difficulty presets (lenient / standard / strict) + tempo cap setting
+- [x] Unit tests incl. standing-curl rejection and plank acceptance (12 tests green)
+- [x] Update this file, commit, push
 
 ### Phase 2 - Camera + solo mode
 - [ ] Camera frame stream + ML Kit pose detection
