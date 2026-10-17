@@ -152,7 +152,7 @@ void main() {
       analyzer.update(85, PushState.down, false, false, 0.05);
       analyzer.update(170, PushState.up, true, false, 0.05);
       expect(analyzer.goodReps, 1);
-      expect(analyzer.feedback, Feedback.goodRep);
+      expect(analyzer.feedback, CoachFeedback.goodRep);
     });
 
     test('flags shallow reps', () {
@@ -161,7 +161,7 @@ void main() {
       analyzer.update(120, PushState.down, false, false, 0.05);
       analyzer.update(170, PushState.up, true, false, 0.05);
       expect(analyzer.incorrectReps, 1);
-      expect(analyzer.feedback, Feedback.goLower);
+      expect(analyzer.feedback, CoachFeedback.goLower);
     });
 
     test('flags sagging hips', () {
@@ -170,7 +170,8 @@ void main() {
       analyzer.update(80, PushState.down, false, false, 0.30);
       analyzer.update(170, PushState.up, true, false, 0.30);
       expect(analyzer.incorrectReps, 1);
-      expect(analyzer.feedback, Feedback.keepBackStraight);
+      expect(analyzer.feedback, CoachFeedback.keepBackStraight);
     });
   });
 }
+

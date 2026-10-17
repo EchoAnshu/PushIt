@@ -18,7 +18,7 @@ Push-Up Battle — phase tracker. This file is rechecked and updated after **eve
 |---|-------|--------|---------------|
 | 0 | Bootstrap: toolchain + repo + docs | done | repo visible on GitHub |
 | 1 | Referee engine port to Dart + tests | done | all engine tests green |
-| 2 | Camera + ML Kit pose + solo mode | pending | counts reps on a real phone |
+| 2 | Camera + ML Kit pose + solo mode | in progress | counts reps on a real phone |
 | 3 | LAN host + SQLite + QR join | pending | two phones in one room |
 | 4 | Race-to-N battle + Elo | pending | full 1v1 match, ratings persist |
 | 5 | Pace-survival / polish (optional) | pending | demo-ready |
@@ -42,10 +42,11 @@ Push-Up Battle — phase tracker. This file is rechecked and updated after **eve
 - [x] Update this file, commit, push
 
 ### Phase 2 - Camera + solo mode
-- [ ] Camera frame stream + ML Kit pose detection
-- [ ] Calibration pass (record user's UP/DOWN elbow range)
-- [ ] Solo screen: rep count, good/incomplete feedback, FPS
-- [ ] Verify on a physical Android phone
+- [x] Camera frame stream + ML Kit pose detection (nv21 via legacy `camera_android` plugin; camerax can't stream ML Kit formats)
+- [x] Solo screen: rep count, good/incomplete feedback, FPS
+- [x] `flutter analyze` clean, 13 tests green, debug APK builds
+- [ ] Calibration pass (deferred - standard preset thresholds for now)
+- [ ] Verify on a physical Android phone (counts reps)
 - [ ] Update this file, commit, push
 
 ### Phase 3 - LAN host + join

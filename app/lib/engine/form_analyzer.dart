@@ -1,7 +1,7 @@
 import 'counter.dart';
 import 'referee_config.dart';
 
-class Feedback {
+class CoachFeedback {
   static const stepIntoView = 'Step into view';
   static const ready = 'Ready';
   static const moveIntoPushup = 'Move into push-up position';
@@ -16,7 +16,7 @@ class Feedback {
 class FormAnalyzer {
   final RefereeConfig config;
 
-  String feedback = Feedback.stepIntoView;
+  String feedback = CoachFeedback.stepIntoView;
   int goodReps = 0;
   int incorrectReps = 0;
   double? lastMinAngle;
@@ -29,7 +29,7 @@ class FormAnalyzer {
   FormAnalyzer({this.config = RefereeConfig.standard});
 
   void reset() {
-    feedback = Feedback.stepIntoView;
+    feedback = CoachFeedback.stepIntoView;
     goodReps = 0;
     incorrectReps = 0;
     lastMinAngle = null;
@@ -75,7 +75,7 @@ class FormAnalyzer {
     if (repCompleted) {
       _finalizeRep();
     } else if (incompleteEvent) {
-      feedback = Feedback.incompleteRep;
+      feedback = CoachFeedback.incompleteRep;
     }
 
     return feedback;
@@ -93,17 +93,19 @@ class FormAnalyzer {
 
     if (depthOk && alignmentOk) {
       goodReps += 1;
-      feedback = Feedback.goodRep;
+      feedback = CoachFeedback.goodRep;
       return;
     }
 
     incorrectReps += 1;
     if (!depthOk && !alignmentOk) {
-      feedback = Feedback.goLowerAndBack;
+      feedback = CoachFeedback.goLowerAndBack;
     } else if (!depthOk) {
-      feedback = Feedback.goLower;
+      feedback = CoachFeedback.goLower;
     } else {
-      feedback = Feedback.keepBackStraight;
+      feedback = CoachFeedback.keepBackStraight;
     }
   }
 }
+
+
