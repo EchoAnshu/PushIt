@@ -1,0 +1,10 @@
+# Python (desktop MVP)
+.venv/
+__pycache__/
+*.pyc
+models/
+*.task
+
+# OS
+Thumbs.db
+.DS_Store
