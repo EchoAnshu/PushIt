@@ -1,10 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pushit_battle/engine/angles.dart';
+import 'package:pushit_battle/engine/calibration.dart';
 import 'package:pushit_battle/engine/counter.dart';
 import 'package:pushit_battle/engine/form_analyzer.dart';
 import 'package:pushit_battle/engine/models.dart';
 import 'package:pushit_battle/engine/posture.dart';
 import 'package:pushit_battle/engine/referee_config.dart';
+import 'package:pushit_battle/engine/view_mode.dart';
 
 List<Landmark> landmarksFrom(Map<int, List<double>> points) {
   final list = List<Landmark>.generate(
@@ -171,6 +173,114 @@ void main() {
       analyzer.update(170, PushState.up, true, false, 0.30);
       expect(analyzer.incorrectReps, 1);
       expect(analyzer.feedback, CoachFeedback.keepBackStraight);
+    });
+  });
+
+  group('detectView', () {
+    const width = 1000.0;
+    const height = 1000.0;
+
+    test('detects side view (shoulders overlapping, long torso)', () {
+      final landmarks = landmarksFrom({
+        leftShoulder: [0.50, 0.30],
+        rightShoulder: [0.52, 0.30],
+        leftHip: [0.50, 0.85],
+        rightHip: [0.53, 0.85],
+      });
+      expect(
+        detectView(landmarks, width, height),
+        ViewMode.side,
+      );
+    });
+
+    test('detects front view (wide shoulders, foreshortened torso)', () {
+      final landmarks = landmarksFrom({
+        leftShoulder: [0.25, 0.30],
+        rightShoulder: [0.75, 0.30],
+        leftHip: [0.35, 0.55],
+        rightHip: [0.65, 0.55],
+      });
+      expect(
+        detectView(landmarks, width, height),
+        ViewMode.front,
+      );
+    });
+
+    test('returns null when landmarks are not visible', () {
+      final landmarks = landmarksFrom({});
+      expect(detectView(landmarks, width, height), isNull);
+    });
+  });
+
+  group('frontExtension', () {
+    const width = 1000.0;
+    const height = 1000.0;
+
+    test('top position gives a large value', () {
+      final landmarks = landmarksFrom({
+        nose: [0.5, 0.2],
+        leftShoulder: [0.2, 0.35],
+        rightShoulder: [0.8, 0.35],
+        leftWrist: [0.45, 0.9],
+        rightWrist: [0.55, 0.9],
+      });
+      final value = frontExtension(landmarks, width, height);
+      expect(value, closeTo((0.9 - 0.2) / 0.6, 0.01));
+    });
+
+    test('bottom position gives a smaller value', () {
+      final landmarks = landmarksFrom({
+        nose: [0.5, 0.75],
+        leftShoulder: [0.2, 0.8],
+        rightShoulder: [0.8, 0.8],
+        leftWrist: [0.45, 0.95],
+        rightWrist: [0.55, 0.95],
+      });
+      final value = frontExtension(landmarks, width, height);
+      expect(value, closeTo((0.95 - 0.75) / 0.6, 0.02));
+    });
+  });
+
+  group('pseudoAngle', () {
+    test('maps the calibrated range onto 95..160', () {
+      expect(pseudoAngle(2.0, 2.0, 3.0), closeTo(95.0, 0.001));
+      expect(pseudoAngle(3.0, 2.0, 3.0), closeTo(160.0, 0.001));
+      expect(pseudoAngle(2.5, 2.0, 3.0), closeTo(127.5, 0.001));
+    });
+
+    test('clamps outside the range', () {
+      expect(pseudoAngle(1.0, 2.0, 3.0), closeTo(95.0, 0.001));
+      expect(pseudoAngle(4.0, 2.0, 3.0), closeTo(160.0, 0.001));
+    });
+  });
+
+  group('calibratedSideConfig', () {
+    test('derives thresholds from the user range', () {
+      const data = CalibrationData(
+        sideUp: 170,
+        sideDown: 95,
+        frontUp: 2.0,
+        frontDown: 1.0,
+      );
+      final config = calibratedSideConfig(data);
+      expect(config.elbowUpAngle, closeTo(162, 0.001));
+      expect(config.elbowDownAngle, closeTo(103, 0.001));
+      expect(config.goodDepthAngle, closeTo(108, 0.001));
+      expect(data.isValid, isTrue);
+    });
+
+    test('keeps a 20 degree gap between thresholds', () {
+      const data = CalibrationData(
+        sideUp: 130,
+        sideDown: 120,
+        frontUp: 2.0,
+        frontDown: 1.0,
+      );
+      final config = calibratedSideConfig(data);
+      expect(
+        config.elbowUpAngle - config.elbowDownAngle,
+        greaterThanOrEqualTo(20.0),
+      );
     });
   });
 }

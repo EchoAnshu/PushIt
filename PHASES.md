@@ -43,11 +43,18 @@ Push-Up Battle — phase tracker. This file is rechecked and updated after **eve
 
 ### Phase 2 - Camera + solo mode
 - [x] Camera frame stream + ML Kit pose detection (nv21 via legacy `camera_android` plugin; camerax can't stream ML Kit formats)
-- [x] Solo screen: rep count, good/incomplete feedback, FPS
-- [x] `flutter analyze` clean, 13 tests green, debug APK builds
-- [ ] Calibration pass (deferred - standard preset thresholds for now)
-- [ ] Verify on a physical Android phone (counts reps)
+- [x] Solo screen: rep count, good/incomplete feedback
+- [x] Undistorted cover-fit preview (FittedBox), portrait lock, no FPS clutter
+- [x] Ting sound on every counted rep (`assets/sounds/ting.wav`, audioplayers)
+- [x] Setup/calibration screen: 4 holds (side top/bottom, front top/bottom), saved via shared_preferences
+- [x] Front-facing counting: nose-to-hands drop metric normalized by shoulder width, auto-switches with side view
+- [x] `flutter analyze` clean, 22 tests green, debug APK builds
+- [ ] Verify on a physical Android phone (counts reps in side AND front view)
 - [ ] Update this file, commit, push
+
+Note: builds on this OneDrive path need Windows long-path support
+(`HKLM\SYSTEM\CurrentControlSet\Control\FileSystem\LongPathsEnabled = 1`, admin) -
+otherwise Gradle fails deleting deep paths with "Unable to delete directory".
 
 ### Phase 3 - LAN host + join
 - [ ] Embedded shelf HTTP server (host phone)

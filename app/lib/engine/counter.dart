@@ -3,7 +3,7 @@ import 'referee_config.dart';
 enum PushState { up, down, unknown }
 
 class PushUpCounter {
-  final RefereeConfig config;
+  RefereeConfig config;
 
   PushState state = PushState.unknown;
   int count = 0;
@@ -27,7 +27,7 @@ class PushUpCounter {
     _attemptDrop = false;
   }
 
-  void _resetCycle() {
+  void resetCycle() {
     state = PushState.unknown;
     smoothedAngle = null;
     _attemptDrop = false;
@@ -37,7 +37,7 @@ class PushUpCounter {
     lostFrames += 1;
     if (lostFrames > config.landmarkLostGraceFrames) {
       lostFrames = 0;
-      _resetCycle();
+      resetCycle();
     }
     return state;
   }
@@ -63,7 +63,7 @@ class PushUpCounter {
 
     if (!postureOk) {
       lostFrames = 0;
-      _resetCycle();
+      resetCycle();
       return state;
     }
 

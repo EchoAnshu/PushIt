@@ -19,6 +19,33 @@ Phone camera (frames)
 The Python MVP at the repo root (`main.py`, `pose_detector.py`, `pushup_counter.py`,
 `form_analyzer.py`) is the reference implementation for the referee engine.
 
+## Vision pipeline (app/lib/vision)
+
+- Camera: front lens, medium preset, `ImageFormatGroup.nv21` via the legacy
+  `camera_android` plugin (camerax can't stream ML Kit-compatible formats).
+- Frames: single nv21 plane -> `InputImage` with rotation from
+  `sensorOrientation` + device orientation; ML Kit returns landmarks in the
+  rotated (upright) frame, normalized against upright width/height.
+- App is locked to portrait; preview is a cover-fit FittedBox (no distortion).
+
+### View modes (app/lib/engine/view_mode.dart)
+
+| View | Metric | Notes |
+|------|--------|-------|
+| Side | elbow angle (shoulder-elbow-wrist) | posture checks (plank, hands below hips) apply |
+| Front | nose-to-hands vertical drop / shoulder width | mapped to pseudo-angle 95..160 |
+
+Auto-detected per frame from torso-length / shoulder-width ratio:
+>= 1.6 side, <= 1.2 front, in between keep last view (5-frame hysteresis,
+15 frames mid-rep). Switching resets the counter cycle, not the count.
+
+### Calibration (Setup screen)
+
+Four 3 s holds (side top/bottom, front top/bottom) capture the user's own
+range; thresholds are derived from them (`app/lib/engine/calibration.dart`)
+and persisted via shared_preferences (`app/lib/storage/calibration_store.dart`).
+Without calibration the standard preset is used.
+
 ## Components
 
 | Path | Responsibility |

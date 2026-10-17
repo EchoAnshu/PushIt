@@ -14,7 +14,7 @@ class CoachFeedback {
 }
 
 class FormAnalyzer {
-  final RefereeConfig config;
+  RefereeConfig config;
 
   String feedback = CoachFeedback.stepIntoView;
   int goodReps = 0;

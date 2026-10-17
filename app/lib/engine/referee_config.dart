@@ -31,6 +31,47 @@ class RefereeConfig {
     required this.tempoCapMs,
   });
 
+  RefereeConfig copyWith({
+    double? minVisibility,
+    int? landmarkLostGraceFrames,
+    int? landmarkLostFeedbackFrames,
+    double? postureWristOverheadFraction,
+    double? pushupMinHandDepthFraction,
+    double? pushupMaxTorsoVerticality,
+    int? postureInvalidGraceFrames,
+    double? goodDepthAngle,
+    double? alignmentMaxDeviation,
+    double? incompleteDropFromUp,
+    double? elbowUpAngle,
+    double? elbowDownAngle,
+    double? angleSmoothing,
+    int? tempoCapMs,
+  }) {
+    return RefereeConfig(
+      minVisibility: minVisibility ?? this.minVisibility,
+      landmarkLostGraceFrames:
+          landmarkLostGraceFrames ?? this.landmarkLostGraceFrames,
+      landmarkLostFeedbackFrames:
+          landmarkLostFeedbackFrames ?? this.landmarkLostFeedbackFrames,
+      postureWristOverheadFraction:
+          postureWristOverheadFraction ?? this.postureWristOverheadFraction,
+      pushupMinHandDepthFraction:
+          pushupMinHandDepthFraction ?? this.pushupMinHandDepthFraction,
+      pushupMaxTorsoVerticality:
+          pushupMaxTorsoVerticality ?? this.pushupMaxTorsoVerticality,
+      postureInvalidGraceFrames:
+          postureInvalidGraceFrames ?? this.postureInvalidGraceFrames,
+      goodDepthAngle: goodDepthAngle ?? this.goodDepthAngle,
+      alignmentMaxDeviation:
+          alignmentMaxDeviation ?? this.alignmentMaxDeviation,
+      incompleteDropFromUp: incompleteDropFromUp ?? this.incompleteDropFromUp,
+      elbowUpAngle: elbowUpAngle ?? this.elbowUpAngle,
+      elbowDownAngle: elbowDownAngle ?? this.elbowDownAngle,
+      angleSmoothing: angleSmoothing ?? this.angleSmoothing,
+      tempoCapMs: tempoCapMs ?? this.tempoCapMs,
+    );
+  }
+
   static const lenient = RefereeConfig(
     minVisibility: 0.3,
     landmarkLostGraceFrames: 15,
